@@ -6,16 +6,6 @@ This document is a short, focused user manual: how to run SentriVault and how to
 
 ---
 
-## Quick start (CodePen)
-
-1. Create a new Pen on CodePen.
-2. Paste the provided `index.html` into the HTML panel.
-3. Paste the provided `style.css` into the CSS panel.
-4. Paste the provided `app.js` into the JS panel.
-5. Open the page preview — you should see the SentriVault UI.
-
----
-
 ## First run — Create a vault
 
 1. On the welcome screen, enter a master password in the "Master password" field and confirm it in the "Confirm password" field.
