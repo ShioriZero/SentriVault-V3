@@ -3,110 +3,101 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SentriVault</title>
+  <title>SentriVault — Bright & Lively</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <div id="app" class="center">
-    <header>
-      <h1>SentriVault</h1>
-      <p class="muted">Client-side password manager — encrypted in your browser</p>
+<body data-theme="bright">
+  <div id="app">
+    <!-- animated background blobs -->
+    <div class="bg-blob blob-1" aria-hidden></div>
+    <div class="bg-blob blob-2" aria-hidden></div>
+    <div class="bg-blob blob-3" aria-hidden></div>
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo-wrap">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <rect x="3" y="6" width="18" height="14" rx="4" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M8 7V5a4 4 0 018 0v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="title-group">
+          <div class="app-title">SentriVault</div>
+          <div class="app-sub">Bright • Friendly • Secure</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="themeToggle" class="btn-icon" title="Toggle theme" aria-label="Toggle theme">🌓</button>
+      </div>
     </header>
 
-    <main id="main">
-      <!-- Auth area -->
-      <section id="auth" class="card">
-        <div id="newVaultUI" class="auth-pane">
-          <h2>Create new vault</h2>
-          <label>Master password
-            <input id="newMaster" type="password" autocomplete="new-password" />
-          </label>
-          <label>Confirm password
-            <input id="newMasterConfirm" type="password" autocomplete="new-password" />
-          </label>
-          <div class="row">
-            <button id="createVaultBtn" class="primary">Create vault</button>
-            <button id="switchToUnlock" class="link">I already have a vault</button>
+    <main class="shell">
+      <!-- AUTH / LOCK -->
+      <section id="auth" class="panel auth-panel" aria-labelledby="authTitle">
+        <div class="auth-inner">
+          <div class="lock-visual" id="lockVisual" aria-hidden>
+            <div class="lock-icon">🔐</div>
           </div>
-          <small class="muted">Vault is stored encrypted in localStorage.</small>
-        </div>
 
-        <div id="unlockUI" class="auth-pane hidden">
-          <h2>Unlock vault</h2>
-          <label>Master password
-            <input id="master" type="password" autocomplete="current-password" />
-          </label>
-          <div class="row">
-            <button id="unlockBtn" class="primary">Unlock</button>
-            <button id="switchToCreate" class="link">Create new vault</button>
+          <h2 id="authTitle">Welcome to SentriVault</h2>
+
+          <div class="hint muted">Create a vault or unlock an existing one — everything is encrypted locally.</div>
+
+          <div class="inputs">
+            <input id="pw1" type="password" placeholder="Master password" autocomplete="new-password" />
+            <input id="pw2" type="password" placeholder="Confirm password (for Create)" autocomplete="new-password" />
           </div>
-          <div class="row">
-            <button id="importBtn" class="secondary">Import vault (encrypted JSON)</button>
+
+          <div class="row auth-row">
+            <button id="createBtn" class="btn primary">Create Vault</button>
+            <button id="unlockBtn" class="btn secondary">Unlock Vault</button>
+          </div>
+
+          <div class="small-actions">
+            <button id="importBtn" class="btn ghost small">Import encrypted vault</button>
             <input id="fileInput" type="file" accept=".json" style="display:none" />
           </div>
-          <small id="vaultExistsMsg" class="muted"></small>
         </div>
       </section>
 
-      <!-- Vault area -->
-      <section id="vault" class="hidden">
-        <div class="toolbar card">
+      <!-- VAULT -->
+      <section id="vault" class="panel vault-panel hidden" aria-hidden="true">
+        <div class="vault-top">
           <div class="left">
             <input id="search" placeholder="Search entries..." />
           </div>
           <div class="right">
-            <button id="exportBtn" class="secondary">Export vault</button>
-            <button id="lockBtn" class="secondary">Lock</button>
+            <button id="exitBtn" class="btn ghost">Exit</button>
+            <button id="lockBtn" class="btn ghost">Lock</button>
+            <button id="exportBtn" class="btn secondary">Export</button>
           </div>
         </div>
 
-        <div class="content">
-          <aside class="panel">
-            <h3>New entry</h3>
-            <label>Title
-              <input id="entryTitle" />
-            </label>
-            <label>Username
-              <input id="entryUser" />
-            </label>
-            <label>Password
-              <div class="pw-row">
-                <input id="entryPass" />
-                <button id="generateBtn" class="small">Generate</button>
-                <button id="copyBtn" class="small">Copy</button>
-              </div>
-            </label>
-            <label>URL
-              <input id="entryURL" />
-            </label>
-            <label>Notes
-              <textarea id="entryNotes" rows="3"></textarea>
-            </label>
-            <div class="row">
-              <button id="addEntryBtn" class="primary">Add</button>
-              <button id="clearEntryBtn" class="secondary">Clear</button>
+        <div class="vault-body">
+          <form id="entryForm" class="entry-form" autocomplete="off">
+            <input id="title" placeholder="Title (e.g., Gmail)" required/>
+            <input id="user" placeholder="Username / email" />
+            <div class="pw-row">
+              <input id="password" placeholder="Password" />
+              <button id="genBtn" type="button" class="btn tiny">Generate</button>
+              <button id="pasteBtn" type="button" class="btn tiny ghost">Paste</button>
             </div>
-            <details>
-              <summary>Password generator options</summary>
-              <label>Length: <input id="genLength" type="range" min="8" max="64" value="16" /> <span id="genLenVal">16</span></label>
-              <label><input id="genLower" type="checkbox" checked /> lower</label>
-              <label><input id="genUpper" type="checkbox" checked /> UPPER</label>
-              <label><input id="genNumbers" type="checkbox" checked /> numbers</label>
-              <label><input id="genSymbols" type="checkbox" /> symbols</label>
-            </details>
-          </aside>
+            <input id="url" placeholder="URL (optional)" />
+            <div class="row form-row">
+              <button id="saveBtn" class="btn primary">Add</button>
+              <button id="clearBtn" type="button" class="btn ghost">Clear</button>
+            </div>
+          </form>
 
-          <section class="panel list-panel">
-            <h3>Entries <small id="countLbl"></small></h3>
-            <div id="entries"></div>
-          </section>
+          <div id="entries" class="entries" aria-live="polite"></div>
         </div>
       </section>
-
-      <footer class="muted small">Built with Web Crypto — AES-GCM + PBKDF2</footer>
     </main>
-  </div>
 
-  <script src="app.js"></script>
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+  </div>
 </body>
 </html>
