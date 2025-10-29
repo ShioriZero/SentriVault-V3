@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SentriVault</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="center">
+    <header>
+      <h1>SentriVault</h1>
+      <p class="muted">Client-side password manager — encrypted in your browser</p>
+    </header>
+
+    <main id="main">
+      <!-- Auth area -->
+      <section id="auth" class="card">
+        <div id="newVaultUI" class="auth-pane">
+          <h2>Create new vault</h2>
+          <label>Master password
+            <input id="newMaster" type="password" autocomplete="new-password" />
+          </label>
+          <label>Confirm password
+            <input id="newMasterConfirm" type="password" autocomplete="new-password" />
+          </label>
+          <div class="row">
+            <button id="createVaultBtn" class="primary">Create vault</button>
+            <button id="switchToUnlock" class="link">I already have a vault</button>
+          </div>
+          <small class="muted">Vault is stored encrypted in localStorage.</small>
+        </div>
+
+        <div id="unlockUI" class="auth-pane hidden">
+          <h2>Unlock vault</h2>
+          <label>Master password
+            <input id="master" type="password" autocomplete="current-password" />
+          </label>
+          <div class="row">
+            <button id="unlockBtn" class="primary">Unlock</button>
+            <button id="switchToCreate" class="link">Create new vault</button>
+          </div>
+          <div class="row">
+            <button id="importBtn" class="secondary">Import vault (encrypted JSON)</button>
+            <input id="fileInput" type="file" accept=".json" style="display:none" />
+          </div>
+          <small id="vaultExistsMsg" class="muted"></small>
+        </div>
+      </section>
+
+      <!-- Vault area -->
+      <section id="vault" class="hidden">
+        <div class="toolbar card">
+          <div class="left">
+            <input id="search" placeholder="Search entries..." />
+          </div>
+          <div class="right">
+            <button id="exportBtn" class="secondary">Export vault</button>
+            <button id="lockBtn" class="secondary">Lock</button>
+          </div>
+        </div>
+
+        <div class="content">
+          <aside class="panel">
+            <h3>New entry</h3>
+            <label>Title
+              <input id="entryTitle" />
+            </label>
+            <label>Username
+              <input id="entryUser" />
+            </label>
+            <label>Password
+              <div class="pw-row">
+                <input id="entryPass" />
+                <button id="generateBtn" class="small">Generate</button>
+                <button id="copyBtn" class="small">Copy</button>
+              </div>
+            </label>
+            <label>URL
+              <input id="entryURL" />
+            </label>
+            <label>Notes
+              <textarea id="entryNotes" rows="3"></textarea>
+            </label>
+            <div class="row">
+              <button id="addEntryBtn" class="primary">Add</button>
+              <button id="clearEntryBtn" class="secondary">Clear</button>
+            </div>
+            <details>
+              <summary>Password generator options</summary>
+              <label>Length: <input id="genLength" type="range" min="8" max="64" value="16" /> <span id="genLenVal">16</span></label>
+              <label><input id="genLower" type="checkbox" checked /> lower</label>
+              <label><input id="genUpper" type="checkbox" checked /> UPPER</label>
+              <label><input id="genNumbers" type="checkbox" checked /> numbers</label>
+              <label><input id="genSymbols" type="checkbox" /> symbols</label>
+            </details>
+          </aside>
+
+          <section class="panel list-panel">
+            <h3>Entries <small id="countLbl"></small></h3>
+            <div id="entries"></div>
+          </section>
+        </div>
+      </section>
+
+      <footer class="muted small">Built with Web Crypto — AES-GCM + PBKDF2</footer>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
